@@ -1,0 +1,6 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Book_library_app" parent="Theme.Material3.DayNight">
+        <!-- Tema artık ActionBar içeriyor -->
+    </style>
+</resources>

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import androidx.appcompat.widget.Toolbar;
 import android.os.Bundle;
@@ -43,7 +44,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = getSharedPreferences("userPrefs", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+        if (isLoggedIn) {
+            setContentView(R.layout.activity_main);
+        } else {
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+            finish();
+            return; // Add return to prevent further execution
+        }
+
         // Ana aktivite başlatıldığında `activity_main` layout'u ekrana yüklenir.
 
         Toolbar toolbar = findViewById(R.id.toolbar);

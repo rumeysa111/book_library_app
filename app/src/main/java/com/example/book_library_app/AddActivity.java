@@ -3,10 +3,12 @@ package com.example.book_library_app;
 import androidx.appcompat.app.AppCompatActivity; // Temel bir Activity sınıfı sağlar.
 import androidx.appcompat.widget.Toolbar; // Toolbar bileşeni için gerekli sınıf.
 
+import android.content.SharedPreferences;
 import android.os.Bundle; // Activity'nin yaşam döngüsü yönetimi için gerekli.
 import android.view.View; // Görüntü (View) bileşenlerini tanımlar.
 import android.widget.Button; // Button bileşenini temsil eder.
 import android.widget.EditText; // Kullanıcıdan metin girişini almak için kullanılan bileşen.
+import android.widget.Toast;
 
 public class AddActivity extends AppCompatActivity { // Kitap ekleme işlemleri için kullanılan Activity sınıfı.
 
@@ -31,12 +33,23 @@ public class AddActivity extends AppCompatActivity { // Kitap ekleme işlemleri 
         // Ekleme düğmesine tıklandığında ne yapılacağını tanımlıyoruz.
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) { // Tıklama işlemi tetiklendiğinde:
-                MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this); // Veritabanı yardımcı sınıfını oluşturuyoruz.
-                // Kullanıcıdan alınan verileri veritabanına ekliyoruz.
-                myDB.addBook(title_input.getText().toString().trim(), // Başlık
-                        author_input.getText().toString().trim(), // Yazar
-                        Integer.valueOf(pages_input.getText().toString().trim())); // Sayfa sayısı
+            public void onClick(View view) {
+
+                SharedPreferences sharedPreferences= getSharedPreferences("userPrefs",MODE_PRIVATE);
+                String userId= sharedPreferences.getString("userId",null);
+
+                if(userId !=null){
+                    // Tıklama işlemi tetiklendiğinde:
+
+                    MyDatabaseHelper myDB = new MyDatabaseHelper(AddActivity.this); // Veritabanı yardımcı sınıfını oluşturuyoruz.
+                    // Kullanıcıdan alınan verileri veritabanına ekliyoruz.
+                    myDB.addBook(title_input.getText().toString().trim(), // Başlık
+                            author_input.getText().toString().trim(), // Yazar
+                            Integer.valueOf(pages_input.getText().toString().trim()),userId); // Sayfa sayısı
+                }else{
+                    Toast.makeText(AddActivity.this,"Please log in first",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
